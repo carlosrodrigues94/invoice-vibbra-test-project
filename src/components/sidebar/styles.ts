@@ -17,7 +17,7 @@ export const Container = styled.ul<ContainerProps>`
   top: 0;
   left: 0;
   height: 100vh;
-  transition: all 1s;
+  transition: all 0.8s;
   border-right: 1px solid ${({ theme }) => theme.colors.whiteTransparent};
   z-index: 10;
 
@@ -29,6 +29,7 @@ export const Container = styled.ul<ContainerProps>`
     height: 50px;
     width: 100%;
     position: relative;
+    transition: all 0.8s;
 
     svg {
       margin: 0 8px;
@@ -38,6 +39,17 @@ export const Container = styled.ul<ContainerProps>`
       background: ${({ theme }) => darken(0.05, theme.colors.secondaryDarken)};
       cursor: pointer;
     }
+
+    span {
+      display: ${(props) => (props.isOpen ? "flex" : "none")};
+    }
+
+    ${(props) => {
+      if (props.isOpen) return css``;
+      return css`
+        justify-content: flex-end;
+      `;
+    }}
   }
 
   .switch-button {
@@ -71,12 +83,12 @@ export const Container = styled.ul<ContainerProps>`
     }
   }
 
-  ${({ isOpen }) => {
-    if (isOpen) return css``;
+  ${(props) => {
+    if (props.isOpen) return css``;
     return css`
       transform: translateX(-312px);
     `;
-  }}
+  }};
 `;
 
 export const ButtonHamburger = styled.button`

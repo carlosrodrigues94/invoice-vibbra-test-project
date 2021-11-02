@@ -2,7 +2,10 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { v4 } from "uuid";
+import { DatePicker } from "../../../../components/date-picker";
+import { InputText } from "../../../../components/input-text";
 import { SimpleModal } from "../../../../components/modals";
+import { SelectCompany } from "../../../../components/select-company";
 import { IState } from "../../../../store";
 import { ICategoriesState } from "../../../../store/modules/categories/types";
 import { ICompaniesState } from "../../../../store/modules/companies/types";
@@ -12,7 +15,8 @@ import { actionSetCloseModalRequest } from "../../../../store/modules/modals/act
 import { IModalsState } from "../../../../store/modules/modals/types";
 import { ICategory } from "../../../../types/category";
 import { ICompany } from "../../../../types/company";
-import { addMoneyMask, removeMask } from "../../../../utils/masks";
+import { addMoneyMask } from "../../../../utils/masks/moneyMask";
+import { removeMask } from "../../../../utils/masks/removeMask";
 import { modals } from "../../../../utils/modals";
 import { ModalContent, ContentInputs } from "./styles";
 
@@ -134,12 +138,13 @@ const ModalRegisterExpense: React.FC = () => {
     const data: IExpense = {
       ...expenseData,
       id: v4(),
-      value: removeMask(expenseData.maskedValue),
+      value: removeMask(expenseData.maskedValue) * 100,
       companyId: expenseData.companyId ?? companySelected.id,
     };
 
     dispatch(actionStoreExpenseeRequest(data));
     handleCloseModal();
+    toast.success("Despesa cadastrada com sucesso!");
   }, [dispatch, expenseData, companySelected, handleCloseModal]);
 
   useEffect(() => {
@@ -162,21 +167,16 @@ const ModalRegisterExpense: React.FC = () => {
       onClickButtonCancel={() => handleCloseModalFindCompany()}
     >
       <ModalContent>
-        <label
-          htmlFor="input-category-name"
+        <InputText
+          className="input-register-expense"
+          title="Digite o nome da Categoria"
           style={{ display: showCategoriesList ? "flex" : "none" }}
-        >
-          Digite o nome da Categoria
-          <input
-            name="input-category-name"
-            value={categoryName}
-            maxLength={18}
-            placeholder="Nome:"
-            onChange={(event) => {
-              setCategoryName(event.target.value.toLocaleLowerCase());
-            }}
-          />
-        </label>
+          value={categoryName}
+          placeholder="ex: Imposto"
+          onChange={(event) => {
+            setCategoryName(event.target.value.toLocaleLowerCase());
+          }}
+        />
         {filterCategories(categories).length > 0 && showCategoriesList && (
           <ul>
             <h4>Selecione uma Categoria</h4>
@@ -198,85 +198,56 @@ const ModalRegisterExpense: React.FC = () => {
           {categorySelected.id && (
             <h4>Categoria Selecionada: {categorySelected.name}</h4>
           )}
-          <label htmlFor="input-expense-name">
-            Nome da Despesa
-            <input
-              name="input-expense-name"
-              value={expenseData.name}
-              maxLength={18}
-              placeholder="Nome:"
-              onChange={(event) => {
-                setExpenseDate({ ...expenseData, name: event.target.value });
-              }}
-            />
-          </label>
+          <InputText
+            title="Nome da Despesa"
+            name="input-expense-name"
+            value={expenseData.name}
+            placeholder="Pagamento de funcionários"
+            onChange={(event) => {
+              setExpenseDate({ ...expenseData, name: event.target.value });
+            }}
+          />
 
-          <label htmlFor="input-expense-value">
-            Valor da Despesa
-            <input
-              name="input-expense-value"
-              value={expenseData.maskedValue}
-              maxLength={18}
-              placeholder="Nome:"
-              onChange={(event) => {
-                setExpenseDate({
-                  ...expenseData,
-                  maskedValue: addMoneyMask(event.target.value),
-                });
-              }}
-            />
-          </label>
+          <InputText
+            title="Valor da Despesa"
+            name="input-expense-value"
+            value={expenseData.maskedValue}
+            placeholder="185,90"
+            onChange={(event) => {
+              setExpenseDate({
+                ...expenseData,
+                maskedValue: addMoneyMask(event.target.value),
+              });
+            }}
+          />
 
-          <label htmlFor="input-expense-date-receive">
-            Data de recebimento
-            <input
-              type="date"
-              name="input-expense-date-receive"
-              placeholder="Data de recebimento"
-              value={
-                new Date(expenseData.paymentDate).toISOString().split("T")[0]
-              }
-              onChange={({ target }) => {
-                setExpenseDate({
-                  ...expenseData,
-                  paymentDate: new Date(target.value),
-                });
-              }}
-            />
-          </label>
-          <label htmlFor="input-expense-date-competence">
-            Data de Competencia
-            <input
-              type="date"
-              name="input-expense-date-competence"
-              placeholder="Data de competência"
-              value={
-                new Date(expenseData.competenceDate).toISOString().split("T")[0]
-              }
-              onChange={({ target }) => {
-                setExpenseDate({
-                  ...expenseData,
-                  competenceDate: new Date(target.value),
-                });
-              }}
-            />
-          </label>
+          <DatePicker
+            title="Data de recebimento"
+            value={expenseData.paymentDate}
+            onChangeDate={(date: Date) => {
+              setExpenseDate({
+                ...expenseData,
+                paymentDate: date,
+              });
+            }}
+          />
 
-          <label htmlFor="input-select-company">
-            Selecione a empresa
-            <select
-              onChange={handleSelectCompany}
-              value={expenseData.companyId}
-              name="input-select-company"
-            >
-              <option disabled>Selecione a empresa</option>
-              {companies.map((company) => (
-                <option value={company.id} key={company.id}>
-                  {company.socialName}
-                </option>
-              ))}
-            </select>
-          </label>
+          <DatePicker
+            title="Data de Competencia"
+            value={expenseData.competenceDate}
+            onChangeDate={(date: Date) => {
+              setExpenseDate({
+                ...expenseData,
+                competenceDate: date,
+              });
+            }}
+          />
+
+          <SelectCompany
+            title="Selecione a empresa"
+            onChangeCompany={handleSelectCompany}
+            value={expenseData.companyId}
+          />
         </ContentInputs>
       </ModalContent>
     </SimpleModal>

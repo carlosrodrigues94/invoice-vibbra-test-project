@@ -23,3 +23,9 @@ export function actionUpdateInvoiceRequest(
 export function actionDeleteInvoiceRequest(invoiceId: string) {
   return action(ActionTypes.DELETE_INVOICE_REQUEST, { invoiceId });
 }
+
+export function actionIndexInvoiceByMonthRequest(data: {
+  yearSelected: number;
+}) {
+  return action(ActionTypes.INDEX_INVOICE_BY_MONTH_REQUEST, data);
+}

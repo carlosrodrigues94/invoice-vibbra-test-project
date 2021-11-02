@@ -9,36 +9,12 @@ export const ModalContent = styled.div`
   width: 100%;
   margin: 8px 0;
 
-  label {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 4px 0;
-    width: 100%;
+  .input-register-expense {
+    width: 80%;
+  }
 
-    input {
-      height: 50px;
-      border-radius: 4px;
-      padding: 0 0 0 8px;
-      border: 0;
-      width: 80%;
-      margin: 4px 0 0 0;
-    }
-
-    input:disabled {
-      background: ${({ theme }) => theme.colors.secondaryDarken};
-    }
-    select {
-      height: 50px;
-      border-radius: 4px;
-      border: 0;
-      width: 80%;
-      font-size: 16px;
-      text-transform: capitalize;
-      padding: 0 0 0 8px;
-      margin: 8px 0;
-    }
+  input:disabled {
+    background: ${({ theme }) => theme.colors.secondaryDarken};
   }
 
   .company-found {
@@ -48,7 +24,7 @@ export const ModalContent = styled.div`
     justify-content: center;
     padding: 8px 0;
 
-    button {
+    > button {
       height: 50px;
     }
 

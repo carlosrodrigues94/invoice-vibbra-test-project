@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { SimpleModal } from "../../../../components/modals";
@@ -10,13 +10,16 @@ import {
 } from "../../../../store/modules/invoices/types";
 import { actionSetCloseModalRequest } from "../../../../store/modules/modals/actions";
 import { IModalsState } from "../../../../store/modules/modals/types";
-import { months } from "../../../../utils";
-import { addMoneyMask, removeMask } from "../../../../utils/masks";
+import { addMoneyMask } from "../../../../utils/masks/moneyMask";
+import { removeMask } from "../../../../utils/masks/removeMask";
 import { modals } from "../../../../utils/modals";
 
 import { ModalContent } from "./styles";
+import { SelectMonth } from "components/select-month";
+import { InputText } from "components/input-text";
+import { DatePicker } from "components/date-picker";
 
-type InvoiceDataState = Omit<IInvoice, "valueUnmasked" | "id">;
+type InvoiceDataState = Omit<IInvoice, "value" | "id">;
 
 export type ModalEditInvoiceProps = {
   invoiceId: string;
@@ -29,7 +32,7 @@ const ModalEditInvoice: React.FC<ModalEditInvoiceProps> = ({ invoiceId }) => {
     dateReceived: new Date(),
     description: "",
     month: "",
-    value: "",
+    maskedValue: "",
   });
 
   const {
@@ -45,7 +48,7 @@ const ModalEditInvoice: React.FC<ModalEditInvoiceProps> = ({ invoiceId }) => {
       dateReceived: new Date(),
       description: "",
       month: "",
-      value: "",
+      maskedValue: "",
     });
   }, []);
 
@@ -57,11 +60,20 @@ const ModalEditInvoice: React.FC<ModalEditInvoiceProps> = ({ invoiceId }) => {
   const handleConfirmEditInvoice = useCallback(() => {
     const invoice = invoices.find((item) => item.id === invoiceId);
 
-    const data = { ...invoice, ...newInvoiceData };
+    const data = {
+      ...invoice,
+      ...newInvoiceData,
+      value: removeMask(newInvoiceData.maskedValue) * 100,
+    };
 
-    const { dateReceived, description, month, value } = newInvoiceData;
+    const { dateReceived, description, month, maskedValue } = newInvoiceData;
 
-    if (!dateReceived || !description || !month || !Number(removeMask(value))) {
+    if (
+      !dateReceived ||
+      !description ||
+      !month ||
+      !Number(removeMask(maskedValue))
+    ) {
       return toast.error("Ops... Digite corretamente os valores");
     }
 
@@ -75,13 +87,12 @@ const ModalEditInvoice: React.FC<ModalEditInvoiceProps> = ({ invoiceId }) => {
 
     if (!invoice) return;
 
-    console.log("INVOICE => ", invoice.month);
-    setNewInvoiceData({
-      dateReceived: invoice.dateReceived,
+    setNewInvoiceData((oldState) => ({
+      dateReceived: oldState.dateReceived,
       description: invoice.description,
-      value: invoice.value,
+      maskedValue: invoice.maskedValue,
       month: invoice.month,
-    });
+    }));
   }, [invoiceId, invoices]);
 
   return (
@@ -93,68 +104,51 @@ const ModalEditInvoice: React.FC<ModalEditInvoiceProps> = ({ invoiceId }) => {
       onClickButtonCancel={handleCancelEditInvoice}
     >
       <ModalContent>
-        <label htmlFor="input-value-invoice">
-          Valor da Nota
-          <input
-            placeholder="Valor da nota"
-            value={newInvoiceData.value}
-            onChange={({ target }) => {
-              setNewInvoiceData({
-                ...newInvoiceData,
-                value: addMoneyMask(target.value),
-              });
-            }}
-          />
-        </label>
+        <InputText
+          title="Valor da Nota"
+          placeholder="ex: R$ 95,90"
+          value={newInvoiceData.maskedValue}
+          onChange={({ target }) => {
+            setNewInvoiceData({
+              ...newInvoiceData,
+              maskedValue: addMoneyMask(target.value),
+            });
+          }}
+        />
 
-        <label htmlFor="input-description-invoice">
-          Descrição do serviço
-          <input
-            placeholder="Descrição do serviço"
-            value={newInvoiceData.description}
-            onChange={(event) => {
-              setNewInvoiceData({
-                ...newInvoiceData,
-                description: event.target.value,
-              });
-            }}
-          />
-        </label>
+        <InputText
+          title="Descrição do serviço"
+          placeholder="Descrição do serviço"
+          value={newInvoiceData.description}
+          onChange={(event) => {
+            setNewInvoiceData({
+              ...newInvoiceData,
+              description: event.target.value,
+            });
+          }}
+        />
 
-        <label htmlFor="input-date-invoice">
-          Data do recebimento
-          <input
-            type="date"
-            placeholder="Data de recebimento"
-            value={
-              new Date(newInvoiceData.dateReceived).toISOString().split("T")[0]
-            }
-            onChange={({ target }) => {
-              setNewInvoiceData({
-                ...newInvoiceData,
-                dateReceived: new Date(target.value),
-              });
-            }}
-          />
-        </label>
+        <DatePicker
+          title="Data do recebimento"
+          value={newInvoiceData.dateReceived}
+          onChangeDate={(date) => {
+            setNewInvoiceData({
+              ...newInvoiceData,
+              dateReceived: date,
+            });
+          }}
+        />
 
-        <label htmlFor="input-month-invoice">
-          Mês de competência
-          <select
-            value={newInvoiceData.month}
-            onChange={(event) => {
-              setNewInvoiceData({
-                ...newInvoiceData,
-                month: event.target.value,
-              });
-            }}
-          >
-            <option disabled>Mês de Competência</option>
-            {months.map((month) => (
-              <option value={month.shortName}>{month.fullName}</option>
-            ))}
-          </select>
-        </label>
+        <SelectMonth
+          title="Mês de competência"
+          value={newInvoiceData.month}
+          onChange={(event) => {
+            setNewInvoiceData({
+              ...newInvoiceData,
+              month: event.target.value,
+            });
+          }}
+        />
       </ModalContent>
     </SimpleModal>
   );

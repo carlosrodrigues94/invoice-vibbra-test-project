@@ -1,5 +1,5 @@
-import { darken } from 'polished';
-import { createGlobalStyle } from 'styled-components';
+import { darken } from "polished";
+import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyles = createGlobalStyle`
  * {
@@ -27,10 +27,7 @@ export const GlobalStyles = createGlobalStyle`
     cursor:pointer;
     transition: all 0.3s;
   }
-  input {
-    ::placeholder {
-    }
-  }
+
    /* width */
    ::-webkit-scrollbar {
     width: 14px;

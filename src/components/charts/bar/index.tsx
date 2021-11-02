@@ -10,22 +10,34 @@ export type BarChartProps = {
   categories: string[];
   categorieType: "category" | "datetime" | "numeric" | undefined;
   series: { name: string; data: number[] }[];
-  formatter: (value: number) => string;
+  formatter?: (value: number) => string;
   title?: string;
+  enableDataLabels?: boolean;
+  barColors?: { colors: string[] };
 };
 
 const BarChart: React.FC<BarChartProps> = ({
   categories,
   series,
-  formatter,
+  formatter = () => "",
   children,
   title,
+  enableDataLabels = true,
+  barColors = {},
 }) => {
   const { colors } = useContext(ThemeContext);
 
   const options: ApexOptions = {
+    legend: { markers: { fillColors: [...(barColors.colors ?? "")] } },
+
+    plotOptions: {
+      bar: {
+        // columnWidth: "10",
+      },
+    },
     chart: {
-      height: 250,
+      height: 200,
+
       toolbar: {
         show: false,
       },
@@ -44,7 +56,7 @@ const BarChart: React.FC<BarChartProps> = ({
 
         return formatter(value as number);
       },
-      enabled: true,
+      enabled: enableDataLabels,
     },
     tooltip: {
       enabled: false,
@@ -68,6 +80,7 @@ const BarChart: React.FC<BarChartProps> = ({
 
     fill: {
       opacity: 0.6,
+      ...barColors,
       type: "solid",
       gradient: {
         shade: "dark",

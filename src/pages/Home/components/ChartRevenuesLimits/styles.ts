@@ -4,7 +4,7 @@ export const ContentDescriptionChartRevenues = styled.article`
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin: 16px 0;
+  margin: 16px;
 
   span {
     margin: 4px 0;

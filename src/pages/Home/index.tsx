@@ -1,14 +1,9 @@
 import React, { useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { SimpleModal } from "../../components/modals";
-import { IState } from "../../store";
+import { useDispatch } from "react-redux";
 
-import {
-  actionSetCloseModalRequest,
-  actionSetShowModalRequest,
-} from "../../store/modules/modals/actions";
+import { actionSetShowModalRequest } from "../../store/modules/modals/actions";
 
-import { IModalsState, ModalData } from "../../store/modules/modals/types";
+import { ModalData } from "../../store/modules/modals/types";
 import { modals } from "../../utils/modals";
 import { Container } from "./styles";
 import ModalRegisterInvoice from "./components/ModalRegisterInvoice";
@@ -16,13 +11,12 @@ import ModalFindCompany from "./components/ModalFindCompany";
 import ChartInvoicesRegisteredByMonth from "./components/ChartInvoicesRegisteredByMonth";
 import ChartRevenuesLimits from "./components/ChartRevenuesLimits";
 import ModalRegisterExpense from "./components/ModalRegisterExpense";
+import ChartExpensesRegisteredByMonth from "./components/ChartExpensesRegisteredByMonth";
+import ChartInvoicesAndExpensesByMonth from "./components/ChartInvoicesAndExpensesByMonth";
+import ChartExpensesRegisteredByCategory from "./components/ChartExpensesRegisteredByCategory";
 
 const Home: React.FC = () => {
   const dispatch = useDispatch();
-
-  const { data: modalOpened } = useSelector<IState, IModalsState>(
-    (state) => state.modals
-  );
 
   const handleOpenModal = useCallback(
     (data: ModalData) => {
@@ -31,28 +25,36 @@ const Home: React.FC = () => {
     [dispatch]
   );
 
-  const handleCloseModal = useCallback(() => {
-    dispatch(actionSetCloseModalRequest());
-  }, [dispatch]);
-
   return (
     <Container>
       <ModalRegisterExpense />
       <ModalFindCompany />
       <ModalRegisterInvoice />
 
-      <button type="button" onClick={() => handleOpenModal(modals.findCompany)}>
-        Lançar um nota Fiscal
-      </button>
-      <button
-        type="button"
-        onClick={() => handleOpenModal(modals.registerExpense)}
-      >
-        Lançar um Despesa
-      </button>
+      <main className="main-header">
+        <button
+          className="button-register"
+          type="button"
+          onClick={() => handleOpenModal(modals.findCompany)}
+        >
+          Lançar um nota Fiscal
+        </button>
+        <button
+          className="button-register"
+          type="button"
+          onClick={() => handleOpenModal(modals.registerExpense)}
+        >
+          Lançar um Despesa
+        </button>
+      </main>
 
-      <ChartInvoicesRegisteredByMonth />
-      <ChartRevenuesLimits />
+      <div className="content-charts">
+        <ChartInvoicesRegisteredByMonth />
+        <ChartExpensesRegisteredByMonth />
+        <ChartInvoicesAndExpensesByMonth />
+        <ChartExpensesRegisteredByCategory />
+        <ChartRevenuesLimits />
+      </div>
     </Container>
   );
 };

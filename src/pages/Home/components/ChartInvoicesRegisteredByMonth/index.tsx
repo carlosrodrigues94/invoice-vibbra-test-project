@@ -1,43 +1,23 @@
-import React, {
-  ChangeEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import { useSelector } from "react-redux";
+import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { FaCheckSquare, FaRegSquare } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 import { BarChart } from "../../../../components/charts";
 import { IState } from "../../../../store";
+import { actionIndexInvoiceByMonthRequest } from "../../../../store/modules/invoices/actions";
 import { IInvoicesState } from "../../../../store/modules/invoices/types";
-import { months } from "../../../../utils";
-import { formatCurrency } from "../../../../utils/masks";
-import { Container } from "./styles";
+import { months } from "../../../../utils/months";
+import { formatCurrency } from "../../../../utils/masks/moneyMask";
+import { Container, ContentDetails } from "./styles";
+import InputCheckbox from "components/input-checkbox";
+import SelectYear from "components/select-year";
 const ChartInvoicesRegisteredByMonth: React.FC = () => {
-  const [invoiceYears, setInvoiceYears] = useState<number[]>([]);
-  const [yearSelected, setYearSelected] = useState<number>(
-    new Date().getFullYear()
-  );
+  const dispatch = useDispatch();
+
+  const [enableDataLabels, setEnableDataLabels] = useState(true);
 
   const {
-    data: { invoices },
+    data: { invoices, invoicesByMonth },
   } = useSelector<IState, IInvoicesState>((state) => state.invoices);
-
-  const invoicesByMonth = useMemo(() => {
-    return months.map(({ shortName }) => {
-      return invoices
-        .filter((item) => item.month === shortName)
-        .filter(
-          (item) => new Date(item.dateReceived).getFullYear() === yearSelected
-        )
-        .map((item) => ({ month: item.month, value: item.valueUnmasked }))
-        .reduce(
-          (prev, curr) => {
-            return { month: shortName, value: prev.value + curr.value };
-          },
-          { month: shortName, value: 0 }
-        );
-    });
-  }, [invoices, yearSelected]);
 
   const handleChangeYearFilter = useCallback(
     (event: ChangeEvent<HTMLSelectElement>) => {
@@ -45,20 +25,15 @@ const ChartInvoicesRegisteredByMonth: React.FC = () => {
 
       if (!year) return;
 
-      setYearSelected(year);
+      dispatch(actionIndexInvoiceByMonthRequest({ yearSelected: year }));
     },
-    []
+    [dispatch]
   );
 
   useEffect(() => {
-    const yearsFiltered = new Set(
-      invoices.map((invoices) => new Date(invoices.dateReceived).getFullYear())
-    );
-
-    const years = Array.from(yearsFiltered);
-
-    setInvoiceYears(years);
-  }, [invoices]);
+    const yearSelected = new Date().getFullYear();
+    dispatch(actionIndexInvoiceByMonthRequest({ yearSelected }));
+  }, [dispatch, invoices]);
 
   return (
     <Container>
@@ -66,22 +41,32 @@ const ChartInvoicesRegisteredByMonth: React.FC = () => {
         title="Valor de Notas Fiscais Geradas Mês a Mês"
         series={[
           {
-            data: invoicesByMonth.map((invoice) => invoice.value / 100),
+            data: invoicesByMonth.invoices.map(
+              (invoice) => invoice.value / 100
+            ),
             name: "Valor de NF Geradas",
           },
         ]}
         formatter={formatCurrency}
         categories={months.map((month) => month.shortName)}
         categorieType="category"
+        enableDataLabels={enableDataLabels}
       >
-        <select onChange={handleChangeYearFilter}>
-          <option disabled>Selecione o Ano</option>
-          {invoiceYears.map((year) => (
-            <option key={year} value={year}>
-              {year}
-            </option>
-          ))}
-        </select>
+        <ContentDetails>
+          <InputCheckbox
+            text="Mostrar detalhes do Gráfico"
+            isChecked={enableDataLabels}
+            checked={enableDataLabels}
+            onChange={(event) => {
+              setEnableDataLabels(event.target.checked);
+            }}
+          />
+          <SelectYear
+            optionData={invoicesByMonth.years}
+            onChange={handleChangeYearFilter}
+            value={invoicesByMonth.yearSelected}
+          />
+        </ContentDetails>
       </BarChart>
     </Container>
   );

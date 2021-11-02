@@ -5,7 +5,7 @@ import { PieChart } from "../../../../components/charts/pie";
 import { IState } from "../../../../store";
 import { IConfigState } from "../../../../store/modules/config/types";
 import { IInvoicesState } from "../../../../store/modules/invoices/types";
-import { formatCurrency } from "../../../../utils/masks";
+import { formatCurrency } from "../../../../utils/masks/moneyMask";
 import { ContentDescriptionChartRevenues } from "./styles";
 
 const limitRevenuesDefault = 8_100_000;
@@ -31,7 +31,7 @@ const ChartRevenuesLimits: React.FC = () => {
 
   useEffect(() => {
     const totalInvoicesEmitted = invoices
-      .map((invoice) => invoice.valueUnmasked)
+      .map((invoice) => invoice.value)
       .reduce((prev, curr) => {
         return prev + curr;
       }, 0);

@@ -79,12 +79,12 @@ export const Content = styled.div`
         background: ${({ theme }) => darken(0.03, theme.colors.primary)};
       }
     }
-  }
 
-  button + button {
-    background: ${({ theme }) => theme.colors.danger};
-    &:hover {
-      background: ${({ theme }) => darken(0.03, theme.colors.danger)};
+    button + button {
+      background: ${({ theme }) => theme.colors.danger};
+      &:hover {
+        background: ${({ theme }) => darken(0.03, theme.colors.danger)};
+      }
     }
   }
 `;

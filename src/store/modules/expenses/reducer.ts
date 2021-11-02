@@ -1,4 +1,6 @@
 import produce from "immer";
+import { months } from "../../../utils/months";
+import { getItemMonth } from "../../../utils/get-item-month";
 import {
   ActionTypes,
   ExpensesStateReducerAction,
@@ -8,7 +10,18 @@ import {
 const INITIAL_STATE: IExpensesState = {
   data: {
     expenses: [],
+    expensesByCategory: {
+      data: [],
+      yearSelected: new Date().getFullYear(),
+      years: [],
+    },
+    expensesByMonth: {
+      expenses: [],
+      years: [],
+      yearSelected: new Date().getFullYear(),
+    },
     expense: {
+      maskedValue: "",
       value: 0,
       id: "",
       categoryId: "",
@@ -57,6 +70,65 @@ export const expenses = (
         if (expenseInd < 0) return;
 
         draft.data.expenses.splice(expenseInd, 1);
+        break;
+
+      case ActionTypes.INDEX_EXPENSE_BY_MONTH_REQUEST:
+        const { expenses } = draft.data;
+        const { yearSelected } = action.payload;
+
+        const expensesByMonth = months.map(({ shortName }) => {
+          return expenses
+            .filter((item) => {
+              const expenseMonthNumber = new Date(
+                item.competenceDate
+              ).getMonth();
+
+              const expenseMonth = months[expenseMonthNumber];
+
+              if (expenseMonth.shortName === shortName) return item;
+
+              return false;
+            })
+            .filter(
+              (item) =>
+                new Date(item.competenceDate).getFullYear() === yearSelected
+            )
+            .map((item) => ({
+              month: getItemMonth(item.competenceDate),
+              value: item.value,
+            }))
+            .reduce(
+              (prev, curr) => {
+                return { month: shortName, value: prev.value + curr.value };
+              },
+              { month: shortName, value: 0 }
+            );
+        });
+
+        const yearsFiltered = new Set(
+          expenses.map((invoices) =>
+            new Date(invoices.competenceDate).getFullYear()
+          )
+        );
+
+        const years = Array.from(yearsFiltered);
+
+        draft.data.expensesByMonth = {
+          years,
+          expenses: expensesByMonth,
+          yearSelected: action.payload.yearSelected,
+        };
+
+        break;
+
+      case ActionTypes.INDEX_EXPENSE_BY_CATEGORY_REQUEST:
+        draft.loading = true;
+        break;
+
+      case ActionTypes.INDEX_EXPENSE_BY_CATEGORY_SUCCESS:
+        draft.loading = false;
+        draft.data.expensesByCategory = action.payload;
+
         break;
 
       default:

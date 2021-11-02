@@ -2,24 +2,28 @@ import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { v4 } from "uuid";
+import { DatePicker } from "../../../../components/date-picker";
+import { InputText } from "../../../../components/input-text";
 import { SimpleModal } from "../../../../components/modals";
+import { SelectMonth } from "../../../../components/select-month";
 import { IState } from "../../../../store";
 import { actionStoreInvoiceRequest } from "../../../../store/modules/invoices/actions";
 import { IInvoice } from "../../../../store/modules/invoices/types";
 import { actionSetCloseModalRequest } from "../../../../store/modules/modals/actions";
 import { IModalsState } from "../../../../store/modules/modals/types";
-import { months } from "../../../../utils";
-import { addMoneyMask, removeMask } from "../../../../utils/masks";
+import { months } from "../../../../utils/months";
+import { removeMask } from "../../../../utils/masks/removeMask";
+import { addMoneyMask } from "../../../../utils/masks/moneyMask";
 import { modals } from "../../../../utils/modals";
 import { ModalContent } from "./styles";
 
-type InvoiceDataState = Omit<IInvoice, "valueUnmasked" | "id">;
+type InvoiceDataState = Omit<IInvoice, "value" | "id">;
 
 const ModalRegisterInvoice: React.FC = () => {
   const dispatch = useDispatch();
 
   const [invoiceData, setInvoiceData] = useState<InvoiceDataState>({
-    value: "",
+    maskedValue: "",
     description: "",
     month: months[0].shortName,
     dateReceived: new Date(),
@@ -33,15 +37,20 @@ const ModalRegisterInvoice: React.FC = () => {
     const data: IInvoice = {
       dateReceived: invoiceData.dateReceived,
       month: invoiceData.month,
-      value: invoiceData.value,
-      valueUnmasked: removeMask(invoiceData.value) * 100,
+      maskedValue: invoiceData.maskedValue,
+      value: removeMask(invoiceData.maskedValue) * 100,
       description: invoiceData.description,
       id: v4(),
     };
 
-    const { dateReceived, description, month, value } = data;
+    const { dateReceived, description, month, maskedValue } = data;
 
-    if (!dateReceived || !description || !month || !Number(removeMask(value))) {
+    if (
+      !dateReceived ||
+      !description ||
+      !month ||
+      !Number(removeMask(maskedValue))
+    ) {
       return toast.error("Ops... Digite corretamente os valores");
     }
 
@@ -52,7 +61,7 @@ const ModalRegisterInvoice: React.FC = () => {
 
     setInvoiceData({
       dateReceived: new Date(),
-      value: "",
+      maskedValue: "",
       month: months[0].shortName,
       description: "",
     });
@@ -71,70 +80,51 @@ const ModalRegisterInvoice: React.FC = () => {
       onClickButtonCancel={handleCancelRegisterInvoice}
     >
       <ModalContent>
-        <label htmlFor="input-value-invoice">
-          Valor da Nota
-          <input
-            placeholder="Valor da nota"
-            value={invoiceData.value}
-            onChange={({ target }) => {
-              setInvoiceData({
-                ...invoiceData,
-                value: addMoneyMask(target.value),
-              });
-            }}
-          />
-        </label>
+        <InputText
+          title="Valor da Nota"
+          placeholder="ex: R$ 95,90"
+          value={invoiceData.maskedValue}
+          onChange={({ target }) => {
+            setInvoiceData({
+              ...invoiceData,
+              maskedValue: addMoneyMask(target.value),
+            });
+          }}
+        />
 
-        <label htmlFor="input-description-invoice">
-          Descrição do serviço
-          <input
-            placeholder="Descrição do serviço"
-            value={invoiceData.description}
-            onChange={(event) => {
-              setInvoiceData({
-                ...invoiceData,
-                description: event.target.value,
-              });
-            }}
-          />
-        </label>
+        <InputText
+          title="Descrição"
+          placeholder="ex: Manutenção"
+          value={invoiceData.description}
+          onChange={({ target }) => {
+            setInvoiceData({
+              ...invoiceData,
+              description: target.value,
+            });
+          }}
+        />
 
-        <label htmlFor="input-date-invoice">
-          Data do recebimento
-          <input
-            type="date"
-            placeholder="Data de recebimento"
-            value={
-              new Date(invoiceData.dateReceived).toISOString().split("T")[0]
-            }
-            onChange={({ target }) => {
-              setInvoiceData({
-                ...invoiceData,
-                dateReceived: new Date(target.value),
-              });
-            }}
-          />
-        </label>
-
-        <label htmlFor="input-month-invoice">
-          Mês de competência
-          <select
-            defaultValue={months[0].shortName}
-            value={invoiceData.month}
-            onChange={(event) => {
-              console.log(event.target.value);
-              setInvoiceData({
-                ...invoiceData,
-                month: event.target.value,
-              });
-            }}
-          >
-            <option disabled>Mês de Competência</option>
-            {months.map((month) => (
-              <option value={month.shortName}>{month.fullName}</option>
-            ))}
-          </select>
-        </label>
+        <DatePicker
+          value={invoiceData.dateReceived}
+          onChangeDate={(date: Date) => {
+            setInvoiceData({
+              ...invoiceData,
+              dateReceived: new Date(date),
+            });
+          }}
+          title="Data de recebimento"
+        />
+        <SelectMonth
+          title="Mês de competência"
+          defaultValue={months[new Date().getMonth() + 1].shortName}
+          value={invoiceData.month}
+          onChange={(event) => {
+            setInvoiceData({
+              ...invoiceData,
+              month: event.target.value,
+            });
+          }}
+        />
       </ModalContent>
     </SimpleModal>
   );

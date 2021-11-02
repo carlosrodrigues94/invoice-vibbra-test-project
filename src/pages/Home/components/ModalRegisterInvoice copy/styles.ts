@@ -11,7 +11,7 @@ export const ModalContent = styled.div`
     margin: 8px 0;
     width: 100%;
 
-    input {
+    > input {
       height: 50px;
       border-radius: 4px;
       padding: 0 0 0 8px;

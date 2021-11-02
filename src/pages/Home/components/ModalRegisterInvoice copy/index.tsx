@@ -8,18 +8,19 @@ import { actionStoreInvoiceRequest } from "../../../../store/modules/invoices/ac
 import { IInvoice } from "../../../../store/modules/invoices/types";
 import { actionSetCloseModalRequest } from "../../../../store/modules/modals/actions";
 import { IModalsState } from "../../../../store/modules/modals/types";
-import { months } from "../../../../utils";
-import { addMoneyMask, removeMask } from "../../../../utils/masks";
+import { months } from "../../../../utils/months";
+import { addMoneyMask } from "../../../../utils/masks/moneyMask";
+import { removeMask } from "../../../../utils/masks/removeMask";
 import { modals } from "../../../../utils/modals";
 import { ModalContent } from "./styles";
 
-type InvoiceDataState = Omit<IInvoice, "valueUnmasked" | "id">;
+type InvoiceDataState = Omit<IInvoice, "value" | "id">;
 
 const ModalRegisterInvoice: React.FC = () => {
   const dispatch = useDispatch();
 
   const [invoiceData, setInvoiceData] = useState<InvoiceDataState>({
-    value: "",
+    maskedValue: "",
     description: "",
     month: months[0].shortName,
     dateReceived: new Date(),
@@ -33,15 +34,20 @@ const ModalRegisterInvoice: React.FC = () => {
     const data: IInvoice = {
       dateReceived: invoiceData.dateReceived,
       month: invoiceData.month,
-      value: invoiceData.value,
-      valueUnmasked: removeMask(invoiceData.value) * 100,
+      maskedValue: invoiceData.maskedValue,
+      value: removeMask(invoiceData.maskedValue) * 100,
       description: invoiceData.description,
       id: v4(),
     };
 
-    const { dateReceived, description, month, value } = data;
+    const { dateReceived, description, month, maskedValue } = data;
 
-    if (!dateReceived || !description || !month || !Number(removeMask(value))) {
+    if (
+      !dateReceived ||
+      !description ||
+      !month ||
+      !Number(removeMask(maskedValue))
+    ) {
       return toast.error("Ops... Digite corretamente os valores");
     }
 
@@ -52,7 +58,7 @@ const ModalRegisterInvoice: React.FC = () => {
 
     setInvoiceData({
       dateReceived: new Date(),
-      value: "",
+      maskedValue: "",
       month: months[0].shortName,
       description: "",
     });
@@ -75,11 +81,11 @@ const ModalRegisterInvoice: React.FC = () => {
           Valor da Nota
           <input
             placeholder="Valor da nota"
-            value={invoiceData.value}
+            value={invoiceData.maskedValue}
             onChange={({ target }) => {
               setInvoiceData({
                 ...invoiceData,
-                value: addMoneyMask(target.value),
+                maskedValue: addMoneyMask(target.value),
               });
             }}
           />
@@ -122,7 +128,6 @@ const ModalRegisterInvoice: React.FC = () => {
             defaultValue={months[0].shortName}
             value={invoiceData.month}
             onChange={(event) => {
-              console.log(event.target.value);
               setInvoiceData({
                 ...invoiceData,
                 month: event.target.value,

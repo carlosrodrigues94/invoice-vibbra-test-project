@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
+import React, { ChangeEvent, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { IState } from "../../store";
@@ -11,7 +11,7 @@ import { modals } from "../../utils/modals";
 import { v4 as uuid } from "uuid";
 import { Container } from "./styles";
 import { SimpleModal } from "../../components/modals";
-import { cnpjMask } from "../../utils/masks";
+import { cnpjMask } from "../../utils/masks/cnpjMask";
 import { actionStoreCompanyRequest } from "../../store/modules/companies/actions";
 import { ICompaniesState } from "../../store/modules/companies/types";
 import {
@@ -211,7 +211,7 @@ const Preferences: React.FC = () => {
           type="range"
           value={config.limitRevenuesMEI / 100_000}
           onChange={handleChangeLimitRevenue}
-          max={89}
+          max={config.limitRevenuesDefault / 100_000}
         />
         <span>{formatCurrency(config.limitRevenuesMEI / 100)}</span>
       </label>

@@ -1,4 +1,5 @@
 import produce from "immer";
+import { months } from "../../../utils/months";
 import {
   ActionTypes,
   IInvoicesState,
@@ -8,63 +9,19 @@ import {
 const INITIAL_STATE: IInvoicesState = {
   data: {
     invoices: [],
-    valuesMonthly: [
-      {
-        month: "jan",
-        value: 0,
-      },
-      {
-        month: "fev",
-        value: 0,
-      },
-      {
-        month: "mar",
-        value: 0,
-      },
-      {
-        month: "abr",
-        value: 0,
-      },
-      {
-        month: "mai",
-        value: 0,
-      },
-      {
-        month: "jun",
-        value: 0,
-      },
-      {
-        month: "jul",
-        value: 0,
-      },
-      {
-        month: "ago",
-        value: 0,
-      },
-      {
-        month: "set",
-        value: 0,
-      },
-      {
-        month: "out",
-        value: 0,
-      },
-      {
-        month: "nov",
-        value: 0,
-      },
-      {
-        month: "dez",
-        value: 0,
-      },
-    ],
+    invoicesByMonth: {
+      invoices: [],
+      years: [],
+      yearSelected: new Date().getFullYear(),
+    },
+
     invoice: {
-      value: "",
+      value: 0,
       id: "",
       description: "",
       dateReceived: new Date(),
       month: "",
-      valueUnmasked: 0,
+      maskedValue: "",
     },
   },
   loading: false,
@@ -107,6 +64,42 @@ export const invoices = (
         if (invoiceInd < 0) return;
 
         draft.data.invoices.splice(invoiceInd, 1);
+        break;
+
+      case ActionTypes.INDEX_INVOICE_BY_MONTH_REQUEST:
+        const { invoices } = draft.data;
+        const { yearSelected } = action.payload;
+
+        const invoicesByMonth = months.map(({ shortName }) => {
+          return invoices
+            .filter((item) => item.month === shortName)
+            .filter(
+              (item) =>
+                new Date(item.dateReceived).getFullYear() === yearSelected
+            )
+            .map((item) => ({ month: item.month, value: item.value }))
+            .reduce(
+              (prev, curr) => {
+                return { month: shortName, value: prev.value + curr.value };
+              },
+              { month: shortName, value: 0 }
+            );
+        });
+
+        const yearsFiltered = new Set(
+          invoices.map((invoices) =>
+            new Date(invoices.dateReceived).getFullYear()
+          )
+        );
+
+        const years = Array.from(yearsFiltered);
+
+        draft.data.invoicesByMonth = {
+          invoices: invoicesByMonth,
+          years,
+          yearSelected: action.payload.yearSelected,
+        };
+
         break;
 
       default:

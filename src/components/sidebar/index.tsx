@@ -58,13 +58,13 @@ const SideBar: React.FC = () => {
         </ButtonHamburger>
       </div>
       <li onClick={() => history.push("/")}>
-        <FaHome /> Home
+        <FaHome /> <span>Home</span>
       </li>
       <li onClick={() => history.push("/preferences")}>
-        <FaRegSun /> Preferencias
+        <FaRegSun /> <span>Preferencias</span>
       </li>
       <li onClick={() => history.push("/history")}>
-        <FaHistory /> Histórico de Lançamentos
+        <FaHistory /> <span>Histórico de Lançamentos</span>
       </li>
     </Container>
   );

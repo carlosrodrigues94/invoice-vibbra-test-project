@@ -1,11 +1,11 @@
-export function formatCurrency(amount: number) {
+function formatCurrency(amount: number) {
   return `R$ ${amount
     .toFixed(2)
     .replace(".", ",")
     .replace(/(\d)(?=(\d{3})+,)/g, "$1.")}`;
 }
 
-export function addMoneyMask(amount: string) {
+function addMoneyMask(amount: string) {
   return `R$ ${
     amount
       .replace(/\D/g, "") // permite digitar apenas números
@@ -15,3 +15,5 @@ export function addMoneyMask(amount: string) {
       .replace(/(\d{1})(\d{1,2})$/, "$1,$2") // coloca virgula antes dos últimos 2 digitos
   }`;
 }
+
+export { addMoneyMask, formatCurrency };

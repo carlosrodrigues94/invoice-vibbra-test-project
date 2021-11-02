@@ -1,4 +1,3 @@
-import { darken } from "polished";
 import styled from "styled-components";
 
 export const Container = styled.div`
@@ -36,7 +35,7 @@ export const Container = styled.div`
     flex-direction: column;
     padding: 16px;
 
-    input {
+    > input {
       margin: 8px 0;
       color: ${({ theme }) => theme.colors.primary};
     }

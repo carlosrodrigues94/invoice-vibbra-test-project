@@ -12,7 +12,7 @@ import {
 } from "../../../../store/modules/modals/actions";
 import { IModalsState } from "../../../../store/modules/modals/types";
 import { ICompany } from "../../../../types/company";
-import { cnpjMask } from "../../../../utils/masks";
+import { cnpjMask } from "../../../../utils/masks/cnpjMask";
 import { modals } from "../../../../utils/modals";
 import { ModalContent } from "./styles";
 

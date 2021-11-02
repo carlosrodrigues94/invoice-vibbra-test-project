@@ -1,4 +1,4 @@
-export const removeMask = (value: string) => {
+const removeMask = (value: string) => {
   const valueUnmasked = value
     .split(".")
     .join("")
@@ -8,3 +8,5 @@ export const removeMask = (value: string) => {
     .join(".");
   return Number(valueUnmasked);
 };
+
+export { removeMask };

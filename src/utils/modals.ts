@@ -1,4 +1,4 @@
-export const modals = {
+const modals = {
   persistInvoice: {
     description: "persist a new invoice",
     id: "1",
@@ -44,4 +44,12 @@ export const modals = {
     id: "8",
     name: "modal edit invoice",
   },
+
+  editExpense: {
+    description: "modal edit expense",
+    id: "9",
+    name: "modal edit expense",
+  },
 };
+
+export { modals };
