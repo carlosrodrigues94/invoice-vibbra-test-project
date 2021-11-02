@@ -5,7 +5,6 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { FaCheckSquare, FaRegSquare } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { BarChart } from "../../../../components/charts";
 import { IState } from "../../../../store";
@@ -102,7 +101,7 @@ const ChartInvoicesAndExpensesByMonth: React.FC = () => {
           <SelectYear
             onChange={handleChangeYearFilter}
             value={invoicesByMonth.yearSelected}
-            optionData={invoicesByMonth.years}
+            optionData={years}
           />
         </ContentDetails>
       </BarChart>
