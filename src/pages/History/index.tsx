@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { actionDeleteExpensesRequest } from "store/modules/expenses/actions";

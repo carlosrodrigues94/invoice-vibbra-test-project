@@ -1,5 +1,4 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
-import { FaCheckSquare, FaRegSquare } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { BarChart } from "../../../../components/charts";
 import { IState } from "../../../../store";
