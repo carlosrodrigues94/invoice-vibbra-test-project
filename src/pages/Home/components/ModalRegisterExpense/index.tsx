@@ -91,6 +91,8 @@ const ModalRegisterExpense: React.FC = () => {
         .toLocaleLowerCase()
         .includes(categoryName);
 
+      if (category.isArchived) return false;
+
       return includesCategoryName && categoryName.length > 2;
     });
   }
