@@ -1,137 +1,69 @@
-## Bem-vindo à Shuri :rocket:
-Você também pode acessar essa documentação em Inglês clicando [aqui](readmeEN.md)
+# Vibbra Teste [INVOICES-EXPENSES]
 
-#### Este documento tem como objetivo explicar alguns passos inicias para iniciar  a rotina de trabalho  do projeto. Aqui você encontrará as seguintes instruções:
+Esse projeto foi criado utilizando o [Create React App](https://github.com/facebook/create-react-app).
 
-  - Como baixar o projeto e começar a trabalhar -> [Baixando o Projeto](#baixando-o-projeto)
-  - Como utilizar o ambiente de Dev para adicionar novas funcionalidades  -> [Iniciando no ambiente de Desenvolvimento](#iniciando-no-ambiente-de-desenvolvimento)
-  - Como funciona o GitFlow do Projeto -> [Seguindo o GitFlow da Shuri](#seguindo-o-gitflow-da-shuri)
-  - Como enviar as novas funcionalidades para o time de QCA -> [Subindo as novas funcionalidades para o Ambiente de Teste](#subindo-para-teste)
-  - Como subir as novas funcionalides para o Ambiente de Produção -> [Subindo as novas funcionalides para o Ambiente de Produção](#subindo-para-prod)
+## Detalhes
 
+Empreendedores formalizados como Microempreendedores Individuais que buscam uma forma automática de organizar suas Receitas (geração de Notas Fiscais) para evitar surpresas com pagamento de impostos ao final do ano.
 
+## Ferramentas utilizadas
 
-### [Baixando o Projeto](#baixando-o-projeto)
+- ![ts](https://badgen.net/badge/-/TypeScript/blue?icon=typescript&label)
+- <b>:atom_symbol: -- React-JS</b>
+- <b>:nail_care: -- Styled Components</b>
 
+## Implementações adicionais
 
-#### Para inicializar o projeto, basta seguir os passos do checklist a seguir:
-  - [Clone o Repositório](#clonando-o-repo)
-  - [Abra o Projeto Localmente](#abrindo-o-projeto)
-  - [NPM || YARN start no Projeto](#rodando-o-projeto)
+- <b>:high_brightness: -- React-Redux</b>
+- <b>:tada: -- Deploy</b>
+- <b>:anchor: -- React Hooks</b>
 
--
-### [Clonando o Repositório](#clonando-o-repo)
+## Utilizando
 
+Para utilizar a aplicação primeiro é necessário você cadastrar ao menos 1 empresa e 1 categoria de despesa, isso é feito na tela de "Preferências", após isso, você já estará apto a lançar uma nota fiscal ou uma despesa no nome da empresa, caso seja despesa você pode anexar a categoria.
 
-Para clonar o repositório, você necessitará ter acesso ao repositório da Shuri, na sequência, basta realizar o seguinte comando
-em seu terminal
+pontos do desafio que foram implementados
 
+- Cadastro de empresa
+- Cadastro de Categoria
+- Lançamento de nota fiscal utilizando o cnpj da empresa para pesquisar a empresa
+- Lançamento de despesa utilizando o nome da categoria para pesquisar a categoria
+- Grafico de notas geradas a cada mês com filtro por ano
+- Grafico de despesas geradas a cada mês com filtro por ano
+- Gráfico de notas e despesas geradas a cada mês com filtro por ano
+- Gráfico indicativo de valor permitido/utilizado/disponível para empreendedor MEI
+- Ajuste de limite máximo para MEI (esse limite quando alterado reflete no gráfico indicativo disponível de valor para gerar uma nova nota fiscal)
+- Habilitar/Desabilitar envio de alertas por SMS ou Email
+- Listagem de notas fiscais lançadas com a possibilidade de editar ou excluir qualquer nota em qualquer campo da mesma
+- Listagem de despesas com a possibilidade de editar qualquer campo ou excluir qualquer despesa
+- Telas Home , Preferências , Histórico
 
+## Extras
 
->     git clone git@bitbucket.org:wisereducacao/shuri-front.git
+- Essa aplicação conta com gerenciamento de estado global utilizando os melhores padrões propostos pelo React Redux
+- Essa aplicação possui um "Theme-Swicher" ou seja, você pode optar por utilizada com os temas light e dark
+- A maioria dos componentes da interface da aplicação foram "componentizados" para reutilização
 
-Aqui temos um exemplo de como realizar o clone do projeto em sua máquina:
-![Clonando um Repositório no terminal](https://i.ibb.co/cwNt09Q/clone.png)
+<p>
+:rocket: Você pode conferir a versão online aqui <a href="https://invoice-vibbra-test-project.vercel.app/" rel="">Vercel Deployment</a>.
+</p>
 
+<p>
+:rocket: Aqui você pode conferir um vídeo de como a aplicação está funcionando <a href="https://www.youtube.com/watch?v=fN9K6EmgmUg&ab_channel=CarlosRodrigues" rel="">You Tube</a>.
+</p>
 
+<p>
+:octocat: Ou, siga os passos abaixo...
+</p>
+<p>(1) Rode o comando $ yarn to install all the dependencies</p>
+<p>(2) Rode o comando $ yarn start to executes the application</p>
 
+## Preview
 
-### [Iniciando o Projeto Localmente](#abrindo-o-projeto)
-   Após clonar o projeto, para iniciar o repositório em sua máquina, basta realizar as seguintes ações em seu terminal:
+<img src="./images/preview-1.png" style="border-radius:5px; margin:20px 0 20px 30px" width="60%" />
+<img src="./images/preview-2.png" style="border-radius:5px; margin:20px 0 20px 30px" width="60%"/>
+<img src="./images/preview-3.png" style="border-radius:5px; margin:20px 0 20px 30px" width="60%"/>
 
-```
-$ cd shuri-front
-```
-Após abrir a pasta do repositório em sua máquina, baixe os pacotes:
+## Nota
 
-    $ yarn || npm install
-
-Aqui temos um exemplo de como baixar os pacotes:
-![Exemplo iniciando projeto](https://i.ibb.co/cL2YZ2M/yarninstall.png)
-
-
-
-
-### [Rodando o Projeto Localmente](#rodando-o-projeto)
-Após baixar todos os pacotes do projeto em sua máquina, para inicar a aplicação é simples, basta realizar os seguintes comandos em seu terminal:
-
-
-    $ yarn start || npm start
-
-
-Atenção: Solicite acesso as variáveis de ambiente e as adicione em seu arquivo .env .
-
-
-Seu arquivo **.env** deverá ter a seguinte estrutura:
-
-    REACT_APP_SHURI_API_BASE_URL=https://example-example.wiser.cloud/api
-
-
-
-
-### [Iniciando no ambiente de Desenvolvimento](#iniciando-no-ambiente-de-desenvolvimento)
-
-O ambiente de desenvolvimento, nesse projeto, está localizado na branch **develop** e funciona como a raíz do projeto, ou seja, branchs  que irão incluir novas funcionalides, resolução de bugs ou adição de testes, devem ser feitas a partir de develop.
-
-Com o projeto já baixado em sua máquina, siga os seguintes comandos para migrar de branch e acessar develop:
-
-    $ git checkout develop
-
-Não esqueça de atualizar a branch, para que todas as funcionalidades de **develop** estejam inclusas em sua máquina. Para atualizar a branch, realize o seguinte comando em seu terminal:
-
-    $ git pull
-
-
-#### Adicionando novas funcionalidades no projeto
-Todas as novas funcionalidades, ou *bugs*, possuem uma respectiva *task* no Jira, dessa maneira, será criado uma branch, a partir de **develop**, que seguirá um padrão de nomenclatura. A seguir, observa-se a estrutura:
-
-
-> prefixo/SHURI-Nº_DA_TASK_NO_JIRA-funcionalide
-
-A lista a seguir, demonstra alguns **prefixos** mais utilizados para a criação da branch:
-
- - FEATURE: Para criação de branchs que adicionaram novas funcionalidades;
- - FIX: Para criação de branchs que solucionaram *bugs*;
- - RELEASE: Para criação de branchs que faram a liberação das funcionalides para produção;
-
- Para adicionar o número da *task*, basta acessar o Jira, e buscar o número da *task* no *card*, que está localizado no local destacado, na seguinte imagem:
- ![Número da task](https://i.ibb.co/85J7TJ7/exemplo-jira.png)
-
-Em relação a funcionalidade, basta descrever, resumidamente o que será feito na branch.
-Observe um exemplo de branch, que fará referência a imagem anterior:
-
-> feature/SHURI-275-create-documentation
-
-Nesse projeto é utilizado [Conventional Commits](https://www.conventionalcommits.org/pt-br/v1.0.0-beta.4/), que estabelece padrões ao commits, para saber mais, basta clicar [aqui](https://www.conventionalcommits.org/pt-br/v1.0.0-beta.4/).
-
-###  [Seguindo o GitFlow da Shuri](#seguindo-o-gitflow-da-shuri)
-O Fluxo do Git da Shuri, funciona da seguinte maneira:
-![Git Flow Shuri](https://i.ibb.co/bLz8Qwt/gitFlow.png)
-
-Resumidamente, a branch **Master**, possui o ambiente atual de *produção*, enquanto **Develop** carrega uma cópia de master e as novas funcionalidades que ainda não estão em produção. Assim sendo, é necessário criar uma branch a partir de **develop**, após a conclusão da tarefa e a aprovação das funcionalidades pelo time de QCA, será aberto um *pull request* para **develop**, (não esqueça, só poderá ser realizado o merge em **develop**, se, e somente se, ao menos um outro desenvolvedor tenha aprovado o *PR*). Após todas as novas funcionalidades estarem em **develop**, é criado uma branch de **release**, branch que possui todas as novas funcionalidades que vão subir para produção, após a criação da branch **release**, abre-se *PR* para **master**.
-
-### [Subindo as novas funcionalidades para o Ambiente de Teste](#subindo-para-teste)
-
-Como explicado no tópico anterior, as funcionalidades que irão para o ambiente de teste, estão em **develop**, dessa maneira, para subir as funcionalides para o ambiente de teste, ou seja, para que o time de QCA possa testar, basta rodar uma **pipeline** para o ambiente de teste. A seguir, observe como subir as funcionalidades para o ambiente de teste:
-
- - Já no repositório da SHURI, vá até a aba **Branches**
- - ![branch pages](https://i.ibb.co/0JJmdn6/branchspage.png)
-
- - Em seguida, encontre a linha em que a branch develop encontra-se, e selecione a coluna **Actions**
- - ![develop row](https://i.ibb.co/MV72QBs/develop.png)
-![actions column](https://i.ibb.co/7R5TXM2/actions.png)
-
- - Já com o *select box* da coluna *Actions* aberto, selecione **Run pipeline for a branch**
- - ![run pipeline](https://i.ibb.co/sRXZK5Y/actions-1.png)
-
- - Ao selecionar **Run pipeline for a branch**, será aberto um modal,  que possui um *select box*, com todos os ambientes que é possível rodar a pipeline, selecione **custom: deploy-to-staging**. Após selecionado, clique em **Run** e aguarde o **Deploy**, no ambiente de teste.
- - ![run](https://i.ibb.co/0Qtwkdf/deploy-staging.png)
-
-
-### [Subindo as novas funcionalides para o Ambiente de Produção](#subindo-para-prod)
-
-Com todas as novas features aprovadas e já em **develop**, basta criar uma branch de **release**, como no exemplo a seguir:
-
-> release/SHURI.20210608.1.7.0
-
-Em seguida, abrir PR para **master**, e na sequência rodar pipeline para **custom:deploy-to-homolog**, e com todas as features já aprovadas e testadas, rodar a pipeline para **branches: master**
+Para esse projeto não foi utilizado uma api externa, o armazenamento dos dados é feio através do armazenamento do navegador, nos detalhes do desafio não era obrigatório utilizar um serviço externo por isso decidi fazer dessa maneira
