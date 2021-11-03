@@ -57,6 +57,7 @@ const BarChart: React.FC<BarChartProps> = ({
         return formatter(value as number);
       },
       enabled: enableDataLabels,
+      style: { colors: [colors.text] },
     },
     tooltip: {
       enabled: false,
