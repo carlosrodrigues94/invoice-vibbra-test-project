@@ -60,9 +60,9 @@ pontos do desafio que foram implementados
 
 ## Preview
 
-<img src="./images/preview-1.png" style="border-radius:5px; margin:20px 0 20px 30px" width="60%" />
-<img src="./images/preview-2.png" style="border-radius:5px; margin:20px 0 20px 30px" width="60%"/>
-<img src="./images/preview-3.png" style="border-radius:5px; margin:20px 0 20px 30px" width="60%"/>
+<img src="./preview-1.png" style="border-radius:5px; margin:20px 0 20px 30px" width="60%" />
+<img src="./preview-2.png" style="border-radius:5px; margin:20px 0 20px 30px" width="60%"/>
+<img src="./preview-3.png" style="border-radius:5px; margin:20px 0 20px 30px" width="60%"/>
 
 ## Nota
 
