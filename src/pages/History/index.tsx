@@ -55,11 +55,7 @@ const History: React.FC = () => {
   const handleClickDeleteExpense = useCallback(
     (id: string) => {
       dispatch(actionDeleteExpensesRequest(id));
-<<<<<<< HEAD
-      toast.success("Nota excluida com sucesso!");
-=======
-      toast.success('Despesa excluida com sucesso!');
->>>>>>> chore: improve code
+      toast.success("Despesa excluida com sucesso!");
     },
     [dispatch]
   );
